@@ -1,204 +1,161 @@
-import React, { useState } from "react";
-// import { useDispatch } from "react-redux";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-// import { LoginComponent } from "../../components/LoginComponent/LoginComponent";
-// import { busType1 } from "../../data/busType1";
-// import { busType2 } from "../../data/busType2";
-// import { newTravelDataChecker } from "../../helper/dataChecker";
-// import { addTravel } from "../../store/travel";
+import { AppContext } from "../AppContext/AppContext";
 
 const AddTravel = () => {
-  const [userData, setuserData] = useState({
-    userName: "",
-    password: "",
-  });
-
-  const [login, setlogin] = useState(false);
-
-  const [travelDetail, setTravelDetail] = useState({
-    id: 0,
-    busType: 0,
-    price: "",
-    company: "Metro",
-    from: "Edirne",
-    duration: "",
-    plate: "",
-    hour: "",
-    to: "Canakkale",
-    date: "",
-    seats: [],
-  });
-
-  const comppanies = [
-    { value: "Metro", name: "Metro" },
-    { value: "Nilufer", name: "Nilufer" },
-    { value: "Truva", name: "Truva" },
-  ];
+  const { travelData, setTravelData,  } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const cities = [
     { value: "Edirne", name: "Edirne Otogari" },
     { value: "Ankara", name: "Ankara Otogari" },
     { value: "Canakkale", name: "Canakkale Otogari" },
+    { value: "İzmir", name: "İzmir (İzmir Otobüs Terminali)" },
+    { value: "Adana", name: "İzmir (Adana Otobüs Terminali)" },
     { value: "Istanbul-Esenler", name: "Istanbul Esenler Otogari" },
     { value: "Istanbul-Samandira", name: "Istanbul Samandira Otogari" },
   ];
 
-  const navigate = useNavigate();
+    // yeni yolculuk objesi
 
-//   const dispatch = useDispatch();
+  const [travelDetail, setTravelDetail] = useState({
+    id: Math.random(),
+    busType: "",
+    price: "",
+    company: "",
+    from: "",
+    duration: "",
+    hour: "",
+    to: "",
+    date: "",
+   
+  });
 
-//   const onClick = () => {
-//     let data = travelDetail;
-//     if (newTravelDataChecker(data) == false) {
-//       data.id = Math.random();
-//       data.price = Number(data.price);
-//       if (travelDetail.busType == 1) {
-//         data.seats = busType1;
-//       } else {
-//         data.seats = busType2;
-//       }
-//     //   dispatch(addTravel({ travel: data }));
+  const comppanies = [
+    { value: "Metro", name: "Metro" },
+    { value: "Nilufer", name: "Nilufer" },
+    { value: "Varan", name: "Varan" },
+  ];
 
-//       console.log(travelDetail);
-//       alert("Sefer başarılı biçimde oluşturuldu.");
-//       navigate("/");
-//     } else {
-//       alert("Lütfen Alanların Tam Dolu Olduğundan Emin Olunuz.");
-//     }
-//   };
 
-  const onLoginClick = () => {
-    if (userData.userName == "atakan" && userData.password == "admin") {
-      setlogin(true);
-    } else {
-      alert("Kullanıcı Adı veya Şifre Hatalı.");
+  // girilen bilgileri alıp yeni bir yolculuk oluşturup bunu yolculuk listesine kaydeden fonksiyon
+  const Save = () => {
+    if (travelDetail.price !=="" && travelDetail.busType !=="" &&travelDetail.company !=="" &&travelDetail.from !=="" 
+    &&travelDetail.duration !=="" &&travelDetail.hour !=="" && travelDetail.to !=="" &&travelDetail.date !=="") {
+     
+      setTravelData([...travelData, travelDetail]);
+      navigate('/')
     }
-  };
+    else{
+      alert("Boş Alanları Doldurunuz")
+    console.log(travelData, "kayıtlarr")
+    }
 
-  const onChangeTravelHandler = (e) => {
-    setTravelDetail((values) => {
-      return { ...values, [e.target.name]: e.target.value };
-    });
-  };
 
-  const onChangeUserHandler = (e) => {
-    setuserData((values) => {
-      return { ...values, [e.target.name]: e.target.value };
-    });
   };
 
   return (
     <div>
-   
-        <div>
-          <div className="travel-panel-back-btn-wrapper">
-          <button className="travel-panel-back-btn" onClick={() => navigate("/")}>
-          ⤾ 
-      </button>
-          </div>
-          <div className="purchase-page-customer">
-            <h3>Yeni Sefer Oluştur</h3>
-            <input
-              className="travel-select"
-              type="number"
-              name="price"
-              placeholder="Tutar (₺)"
-              value={travelDetail.price}
-            //   onChange={(e) => onChangeTravelHandler(e)}
-            />
-            <select
-              className="travel-select"
-              name="company"
-              placeholder="Şirket İsmi"
-              value={travelDetail.company}
-            //   onChange={(e) => onChangeTravelHandler(e)}
-            >
-              {comppanies.map((x, index) => (
+
+      <div>
+       
+        <div className="purchase-page-customer">
+          <h3>Yeni Sefer Oluştur</h3>
+          <input
+            className="travel-select"
+            type="number"
+            name="price"
+            placeholder="Fiyat"
+            value={travelDetail.price}
+            onChange={e => setTravelDetail({ ...travelDetail, price: e.target.value })}
+          />
+          <select
+            className="travel-select"
+            name="company"
+            placeholder="Seyahat Şirketi"
+            value={travelDetail.company}
+            onChange={e => setTravelDetail({ ...travelDetail, company: e.target.value })}
+          >
+            {comppanies.map((x, index) => (
+              <option value={x.value} key={index}>
+                {x.name}
+              </option>
+            ))}
+          </select>
+          <select
+            className="travel-select"
+            name="from"
+            placeholder="Nereden"
+            value={travelDetail.from}
+            onChange={e => setTravelDetail({ ...travelDetail, from: e.target.value })}
+          >
+            {cities
+              .filter((x) => x.value !== travelDetail.to)
+              .map((x, index) => (
                 <option value={x.value} key={index}>
                   {x.name}
                 </option>
               ))}
-            </select>
-            <select
-              className="travel-select"
-              name="from"
-              placeholder="Nereden"
-              value={travelDetail.from}
-            //   onChange={(e) => onChangeTravelHandler(e)}
-            >
-              {cities
-                .filter((x) => x.value !== travelDetail.to)
-                .map((x, index) => (
-                  <option value={x.value} key={index}>
-                    {x.name}
-                  </option>
-                ))}
-            </select>
+          </select>
 
-            <select
-              name="to"
-              className="travel-select"
-              placeholder="Nereye"
-            //   value={travelDetail.to}
-            //   onChange={(e) => onChangeTravelHandler(e)}
-            >
-              {cities
-                .filter((x) => x.value !== travelDetail.from)
-                .map((x, index) => (
-                  <option value={x.value} key={index}>
-                    {x.name}
-                  </option>
-                ))}
-            </select>
+          <select
+            name="to"
+            className="travel-select"
+            placeholder="Nereye"
+            value={travelDetail.to}
+            onChange={e => setTravelDetail({ ...travelDetail, to: e.target.value })}
+          >
+            {cities
+              .filter((x) => x.value !== travelDetail.from)
+              .map((x, index) => (
+                <option value={x.value} key={index}>
+                  {x.name}
+                </option>
+              ))}
+          </select>
 
-            <input
-              type="text"
-              className="travel-select"
-              name="duration"
-              placeholder="Seyehat Süresi (Dk)"
-              value={travelDetail.duration}
-              onChange={(e) => onChangeTravelHandler(e)}
-            />
-            <input
-              className="travel-select"
-              name="plate"
-              placeholder="Araç Plakası(*(11 AA 11))"
-              value={travelDetail.plate}
-              onChange={(e) => onChangeTravelHandler(e)}
-            />
-            <input
-              type="text"
-              className="travel-select"
-              name="hour"
-              placeholder="Saat(*(21.30))"
-              value={travelDetail.hour}
-              onChange={(e) => onChangeTravelHandler(e)}
-            />
+          <input
+            type="text"
+            className="travel-select"
+            name="duration"
+            placeholder="Süre"
+            value={travelDetail.duration}
+            onChange={e => setTravelDetail({ ...travelDetail, duration: e.target.value })}
+          />
+         
+          <input
+            type="text"
+            className="travel-select"
+            name="hour"
+            placeholder="Yolculuk Başlangıç Saati"
+            value={travelDetail.hour}
+            onChange={e => setTravelDetail({ ...travelDetail, hour: e.target.value })}
+          />
 
-            <select
-              className="travel-select"
-              name="busType"
-              value={travelDetail.busType}
-              onChange={(e) => onChangeTravelHandler(e)}
-            >
-              <option value={1}>Otobüs Tip:1 (33 Yolcu)</option>
-              <option value={2}>Otobüs Tip:2 (44 Yolcu)</option>
-            </select>
-            <input
-              type="date"
-              className="travel-select"
-              name="date"
-              placeholder="Seyehat Tarihi"
-              value={travelDetail.date}
-              onChange={(e) => onChangeTravelHandler(e)}
-            />
-            <button className="travel-btn" >
-              Sefer Oluştur
-            </button>
-          </div>
+          <select
+            className="travel-select"
+            name="busType"
+            value={travelDetail.busType}
+            onChange={e => setTravelDetail({ ...travelDetail, busType: e.target.value })}
+          >
+            <option value={1}>30 Koltuk</option>
+            <option value={2}>40 Koltuk</option>
+          </select>
+          <input
+            type="date"
+            className="travel-select"
+            name="date"
+            placeholder="Seyehat Tarihi"
+            value={travelDetail.date}
+            onChange={e => setTravelDetail({ ...travelDetail, date: e.target.value })}
+          />
+          <button onClick={Save} className="travel-btn" >
+            Sefer Oluştur
+          </button>
         </div>
-     
-      
+      </div>
+
+
     </div>
   );
 };

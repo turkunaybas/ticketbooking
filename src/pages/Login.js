@@ -1,42 +1,35 @@
 import React, { useState, useContext } from 'react';
-import LoginForm from './LoginForm';
-import { CarContext } from '../AppContext/CarContext';
-import Main from './Main';
+import { AppContext } from '../AppContext/AppContext';
+import LoginForm from '../components/LoginForm';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-
+    const { user,setUser ,  } = useContext(AppContext);
+    const navigate = useNavigate();
     const [error, setError] = useState("");
+    const [admin, setAdmin] = useState( { name: "cihan", password: "123" });
 
-    const [user, setUser] = useState("");
-
-    const admin = { name: "admin", password: "123" }
+    // admin bilgisiyle ekrandan girilen bilgiler uyuşuyorsa giriş yapan fonksiyon
     const Login = details => {
         console.log(details);
-        let selected;
-
         if (admin.name === details.name && admin.password === details.password) {
             setUser({
-                mail: details.mail,
+                name: details.name,
                 password: details.password
             });
+            navigate('/')
+
 
         } else {
-            console.log("girmedi", selected)
+            console.log("girmedi", user)
             setError("BİLGİLER UYMADI")
         }
     }
-
-
-    const Logout = () => {
-        setUser({ mail: "", password: "" })
-    }
-
-
     return (
 
         <div className='Login'>
 
-            <LoginForm Login={Login} Cancel={Cancel} error={error} />
+            <LoginForm Login={Login} error={error} />
 
         </div>
 

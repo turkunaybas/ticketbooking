@@ -1,29 +1,27 @@
-import React, { useState } from "react";
+import React, { useState ,useContext} from "react";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../AppContext/AppContext";
+
 
 const BusFilter = () => {
   let navigate = useNavigate();
-
+  const { cities } = useContext(AppContext);
   const [travelData, setTravelData] = useState({
+      //bu bilgileri anasayfadan buraya gönderdik kullanabilmek için
+
     from: "Edirne",
     to: "Canakkale",
     date: new Date().toISOString().split("T")[0],
   });
 
-  const cities = [
-    { value: "Edirne", name: "Edirne (Edirne Otobüs Terminali)" },
-    { value: "Ankara", name: "Ankara (Ankara Otobüs Terminali)" },
-    { value: "Canakkale", name: "Çanakkale (Çanakkale Otobüs Terminali)" },
-    { value: "Istanbul-Esenler", name: "İstanbul (Esenler Otobüs Terminali)" },
-    { value: "Istanbul-Samandira", name: "İstanbul (Samandira Otobüs Terminali)" },
-  ];
-
+  // ekrandan aldığımız bilgileri kaydettik
   const onChangeHandler = (e) => {
     setTravelData((values) => {
       return { ...values, [e.target.name]: e.target.value };
     });
   };
 
+  // ekrandan alınan  nereden nereye ne zaman bilgilerini filtreleme yapabilmek için ticket ekranına gönderdik
   const onClick = () => {
     console.log("data", travelData);
     navigate(
