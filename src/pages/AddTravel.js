@@ -31,7 +31,7 @@ const AddTravel = () => {
    
   });
 
-  const comppanies = [
+  const data = [
     { value: "Metro", name: "Metro" },
     { value: "Nilufer", name: "Nilufer" },
     { value: "Varan", name: "Varan" },
@@ -76,7 +76,7 @@ const AddTravel = () => {
             value={travelDetail.company}
             onChange={e => setTravelDetail({ ...travelDetail, company: e.target.value })}
           >
-            {comppanies.map((x, index) => (
+            {data.map((x, index) => (
               <option value={x.value} key={index}>
                 {x.name}
               </option>
