@@ -26,13 +26,38 @@ function Ticket() {
     );
   };
 
+  const data = [
+    { value: "", name: "Tümü" },
+    { value: "Metro", name: "Metro" },
+    { value: "Nilüfer", name: "Nilufer" },
+    { value: "Varan", name: "Varan" },
+  ];
+  
   // filtreleme sonucu çıkan yolculukların bilgilerinin detaylarınnı görmek için bu verileri o ekrana parametre olarak gönderdik
   const onClick = (trip) => {
     navigate("/detail/" + trip.price +"/" + trip.to + "/" + trip.from+ "/"+trip.date +"/"+ trip.company+"/"+ trip.seat+"/"+ trip.hour);
   };
 
+
   return (
     <div className="ticket-screen-div">
+
+      {/* firmalara göre filtreleme yaptığımız alan */}
+        <select
+        className="travel-select"
+        name="from"
+        placeholder="Nereden"
+        value={company}
+        onChange={(e) => setCompany(e.target.value)}
+      >
+        {data.map((x, index) => (
+          <option value={x.value} key={index}>
+            {x.name}
+          </option>
+        ))}
+      </select>
+
+      
     
       {applyFilter(travelData).length == 0 ? (
         <h2>Sefer Bulunamadı!</h2>

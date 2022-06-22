@@ -22,6 +22,8 @@ function App() {
     { value: "Istanbul-Samandira", name: "İstanbul (Samandira Otobüs Terminali)" },
   ];
 
+  // sabitteki yolculuk listesi
+
   const [travelData, setTravelData] = useState(
     [
       {
